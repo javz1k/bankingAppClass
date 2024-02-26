@@ -200,13 +200,6 @@ extension HomeViewController {
             realm.refresh()
             self.mainCollectionView.reloadData()
             self.navigationController?.popViewController(animated: true)
-
-            print("jhhj")
-            
-            print("lorem ipsum")
-            
-            print("test commit2")
-            print("test commit3")
             
         }
         
