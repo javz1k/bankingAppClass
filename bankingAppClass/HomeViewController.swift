@@ -180,36 +180,48 @@ extension HomeViewController {
    
     
     fileprivate func deleteBrain(){
-//        onScreenCardIndexPath
-        let vc = UIStoryboard.init(name: "App", bundle: Bundle.main).instantiateViewController(withIdentifier: "DeleteCardViewController") as! DeleteCardViewController
         
-        self.navigationController?.pushViewController(vc, animated: true)
-        vc.deleteCallBack = { [weak self] data in
-            guard let self = self else {return}
-            print("homeViewdeleteBrainData\(data)")
-            DeletingCardName = data
-            
-            let realm = try! Realm()
-            
-                let selectedCard = realm.objects(Card.self).where {
-                    
-                    $0.cardname == self.DeletingCardName
-                }.first!
-                
-            if selectedCard.cardname != nil{
-                try! realm.write {
-                    realm.delete(selectedCard)
-                }
-            }else{
-                print("card not found")
-            }
-          
-           
-            realm.refresh()
-            self.mainCollectionView.reloadData()
-            self.navigationController?.popViewController(animated: true)
-            
+        guard let indexToDelete = onScreenCardIndexPath else { print ("Index to delete is nil") 
+            return }
+        guard let cardList = cardList else { print("Card list is nil")
+            return }
+        guard indexToDelete >= 0 && indexToDelete < cardList.count else {print("Invalid index to delete")
+            return }
+        
+        let cardToDelete = cardList[indexToDelete]
+        print(cardToDelete)
+        
+        try! realm.write {
+            realm.delete(cardToDelete)
         }
+        
+        getCardList()
+        mainCollectionView.reloadData()
+
+        
+        //DELETING BY CARD NAME WITH PUSHING DELETE CONTROLLER IT STILL WORKS)
+        
+//        let vc = UIStoryboard.init(name: "App", bundle: Bundle.main).instantiateViewController(withIdentifier: "DeleteCardViewController") as! DeleteCardViewController
+//        self.navigationController?.pushViewController(vc, animated: true)
+//        vc.deleteCallBack = { [weak self] data in
+//            guard let self = self else {return}
+//            print("homeViewdeleteBrainData\(data)")
+//            DeletingCardName = data
+//            let realm = try! Realm()
+//                let selectedCard = realm.objects(Card.self).where {
+//                    $0.cardname == self.DeletingCardName
+//                }.first!
+//            if selectedCard.cardname != nil{
+//                try! realm.write {
+//                    realm.delete(selectedCard)
+//                }
+//            }else{
+//                print("card not found")
+//            }
+//            realm.refresh()
+//            self.mainCollectionView.reloadData()
+//            self.navigationController?.popViewController(animated: true)
+//        }
         
         
         
