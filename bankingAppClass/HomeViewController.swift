@@ -181,30 +181,45 @@ extension HomeViewController {
     
     fileprivate func deleteBrain(){
         
-        guard let indexToDelete = onScreenCardIndexPath else { print ("Index to delete is nil") 
-            return }
-        guard let cardList = cardList else { print("Card list is nil")
-            return }
-        guard indexToDelete >= 0 && indexToDelete < cardList.count else {print("Invalid index to delete")
-            return }
+        let deleteWarningAlert = UIAlertController(title: "Hang on, are you shure?", message: "Make your choose below wisely", preferredStyle: UIAlertController.Style.alert)
+        deleteWarningAlert.addAction(UIAlertAction(title: "Goddamn yes", style: UIAlertAction.Style.default, handler: { _ in
+            
+            
+            guard let indexToDelete = self.onScreenCardIndexPath else { print ("Index to delete is nil")
+                return }
+            guard let cardList = self.cardList else { print("Card list is nil")
+                return }
+            guard indexToDelete >= 0 && indexToDelete < cardList.count else {print("Invalid index to delete")
+                return }
+            
+            let cardToDelete = cardList[indexToDelete]
+            
+            if cardToDelete.isFavorite ?? false{
+                print("cant delete favorite card")
+                let alert = UIAlertController(title: "OOPS... something went wrong", message: "Can`t delete favorite card", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            try! self.realm.write {
+                let alert = UIAlertController(title: "Success", message: "\(cardToDelete.cardname ?? "") is deleted", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.realm.delete(cardToDelete)
+            }
+          
+            
+            self.getCardList()
+            self.mainCollectionView.reloadData()
+            
+        }))
         
-        let cardToDelete = cardList[indexToDelete]
-        print(cardToDelete)
+        deleteWarningAlert.addAction(UIAlertAction(title: "Nope", style: UIAlertAction.Style.cancel))
+        self.present(deleteWarningAlert, animated: true, completion: nil)
         
-        if cardToDelete.isFavorite ?? false{
-            print("cant delete favorite card")
-            return
-        }
         
-        try! realm.write {
-            realm.delete(cardToDelete)
-        }
-        
-        getCardList()
-        mainCollectionView.reloadData()
-
-        
-        //DELETING BY CARD NAME WITH PUSHING DELETE CONTROLLER IT STILL WORKS)
+        //DELETING BY CARD NAME WITH PUSHING DELETE CONTROLLER IT STILL WORKS BUT U NEED TO PRINT CARD NAME CORRECTLY.. SORRY DIDNT HAVE TIME TO HANDLE THIS)
         
 //        let vc = UIStoryboard.init(name: "App", bundle: Bundle.main).instantiateViewController(withIdentifier: "DeleteCardViewController") as! DeleteCardViewController
 //        self.navigationController?.pushViewController(vc, animated: true)
@@ -227,10 +242,7 @@ extension HomeViewController {
 //            self.mainCollectionView.reloadData()
 //            self.navigationController?.popViewController(animated: true)
 //        }
-        
-        
-        
-    }
+        }
     
     fileprivate func createBrain(){
         
