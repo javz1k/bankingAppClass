@@ -161,12 +161,12 @@
 		A42885422B8C802300902AA4 /* Card */ = {
 			isa = PBXGroup;
 			children = (
+				A48A4E4E2B6A67AA00221B67 /* MainCollectionViewCell.swift */,
+				A48A4E522B6A6A7800221B67 /* CardCollectionViewCell.swift */,
 				A4A79CF92B81FD0A0099FE1D /* EmptyCardCell.swift */,
 				A4A79CFA2B81FD0A0099FE1D /* EmptyCardCell.xib */,
-				A48A4E522B6A6A7800221B67 /* CardCollectionViewCell.swift */,
 				A48A4E532B6A6A7800221B67 /* CardCollectionViewCell.xib */,
 				A48A4E4F2B6A67AA00221B67 /* MainCollectionViewCell.xib */,
-				A48A4E4E2B6A67AA00221B67 /* MainCollectionViewCell.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";

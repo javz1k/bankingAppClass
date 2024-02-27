@@ -9,6 +9,8 @@ import Foundation
 import RealmSwift
 
 class Card: Object, CardCollectionViewCellProtocol {
+ 
+    
     
     @Persisted var cardId: String?
     @Persisted var cardname:String?

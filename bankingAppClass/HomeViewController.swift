@@ -180,7 +180,7 @@ extension HomeViewController {
    
     
     fileprivate func deleteBrain(){
-        
+//        onScreenCardIndexPath
         let vc = UIStoryboard.init(name: "App", bundle: Bundle.main).instantiateViewController(withIdentifier: "DeleteCardViewController") as! DeleteCardViewController
         
         self.navigationController?.pushViewController(vc, animated: true)
@@ -190,13 +190,21 @@ extension HomeViewController {
             DeletingCardName = data
             
             let realm = try! Realm()
-            let selectedCard = realm.objects(Card.self).where {
-                $0.cardname == self.DeletingCardName
-            }.first!
             
-            try! realm.write {
-                realm.delete(selectedCard)
+                let selectedCard = realm.objects(Card.self).where {
+                    
+                    $0.cardname == self.DeletingCardName
+                }.first!
+                
+            if selectedCard.cardname != nil{
+                try! realm.write {
+                    realm.delete(selectedCard)
+                }
+            }else{
+                print("card not found")
             }
+          
+           
             realm.refresh()
             self.mainCollectionView.reloadData()
             self.navigationController?.popViewController(animated: true)
