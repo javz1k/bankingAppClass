@@ -191,6 +191,11 @@ extension HomeViewController {
         let cardToDelete = cardList[indexToDelete]
         print(cardToDelete)
         
+        if cardToDelete.isFavorite ?? false{
+            print("cant delete favorite card")
+            return
+        }
+        
         try! realm.write {
             realm.delete(cardToDelete)
         }
