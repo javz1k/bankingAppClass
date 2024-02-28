@@ -60,14 +60,10 @@ extension MainCollectionViewCell :UICollectionViewDelegate, UICollectionViewData
     //function for finding onscreen card index
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
             var visibleRect = CGRect()
-
             visibleRect.origin = cardCollectionView.contentOffset
             visibleRect.size = cardCollectionView.bounds.size
-
             let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
-
             guard let indexPath = cardCollectionView.indexPathForItem(at: visiblePoint) else { return }
-
             print(indexPath.row)
             onScreenIndexPathCallBack?(indexPath.row)
         }

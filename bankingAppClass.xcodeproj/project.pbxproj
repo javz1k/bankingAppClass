@@ -106,12 +106,14 @@
 		A428853C2B8C7EE700902AA4 /* QuickAcrion */ = {
 			isa = PBXGroup;
 			children = (
+				A48A4E5C2B6A956800221B67 /* QuickActionCollectionViewCell.swift */,
+				A4A79CFF2B83B3E10099FE1D /* ActionCellModel.swift */,
 				A4A79D0B2B8922530099FE1D /* DeleteCardViewController.swift */,
 				A4A79D012B8789F30099FE1D /* AddCardViewController.swift */,
-				A4A79CFF2B83B3E10099FE1D /* ActionCellModel.swift */,
 				A48A4E582B6A935C00221B67 /* QuickActionCell.swift */,
-				A48A4E5C2B6A956800221B67 /* QuickActionCollectionViewCell.swift */,
 				A48A4E592B6A935C00221B67 /* QuickActionCell.xib */,
+				A48A4E622B70363800221B67 /* TransferViewController.swift */,
+				A48A4E632B70363800221B67 /* TransferViewController.xib */,
 				A48A4E5D2B6A956800221B67 /* QuickActionCollectionViewCell.xib */,
 			);
 			path = QuickAcrion;
@@ -201,22 +203,12 @@
 				A42885402B8C7FCE00902AA4 /* Model & Extension & Helper */,
 				A428853E2B8C7F6D00902AA4 /* Loan */,
 				A428853C2B8C7EE700902AA4 /* QuickAcrion */,
-				A48A4E662B703A9200221B67 /* Transfer */,
 				A428853D2B8C7F3000902AA4 /* Auth */,
 				A48A4E3E2B67DAEC00221B67 /* App.storyboard */,
 				A44B92E42B616085002060A5 /* Assets.xcassets */,
 				A44B92E92B616085002060A5 /* Info.plist */,
 			);
 			path = bankingAppClass;
-			sourceTree = "<group>";
-		};
-		A48A4E662B703A9200221B67 /* Transfer */ = {
-			isa = PBXGroup;
-			children = (
-				A48A4E622B70363800221B67 /* TransferViewController.swift */,
-				A48A4E632B70363800221B67 /* TransferViewController.xib */,
-			);
-			path = Transfer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

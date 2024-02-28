@@ -173,14 +173,12 @@ extension HomeViewController {
     
     fileprivate func loanBrain(){
         let vc = UIStoryboard.init(name: "App", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoanViewController") as! LoanViewController
-        
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
    
     
     fileprivate func deleteBrain(){
-        
         let deleteWarningAlert = UIAlertController(title: "Hang on, are you shure?", message: "Make your choose below wisely", preferredStyle: UIAlertController.Style.alert)
         deleteWarningAlert.addAction(UIAlertAction(title: "Goddamn yes", style: UIAlertAction.Style.default, handler: { _ in
             
@@ -209,7 +207,6 @@ extension HomeViewController {
                 self.realm.delete(cardToDelete)
             }
           
-            
             self.getCardList()
             self.mainCollectionView.reloadData()
             
@@ -244,29 +241,32 @@ extension HomeViewController {
 //        }
         }
     
-    fileprivate func createBrain(){
-        
+    
+    fileprivate func createBrain() {
         let vc = UIStoryboard.init(name: "App", bundle: Bundle.main).instantiateViewController(withIdentifier: "AddCardViewController") as! AddCardViewController
         self.navigationController?.pushViewController(vc, animated: true)
-        
         vc.addDataCallBack = { [weak self] DataArray in
-            print("this is from home callback\(DataArray)")
-            self?.card.cardname = DataArray[0]
-            self?.card.cardtype = DataArray[2]
-            self?.card.pan = DataArray[1]
-            
-            self?.card.cardId = UUID().uuidString
-            self?.card.amount = 0.0
-            self?.card.isFavorite = false
-            try! self?.realm.write{
-                self?.realm.add(self!.card)
+            guard let self = self else { return }
+            print("this is from home callback \(DataArray)")
+            do {
+                try self.realm.write {
+                    let card = Card()
+                    card.cardname = DataArray[0]
+                    card.pan = DataArray[1]
+                    card.cardtype = DataArray[2]
+                    card.cardId = UUID().uuidString
+                    card.amount = 0.0
+                    card.isFavorite = false
+                    self.realm.add(card)
+                }
+                self.realm.refresh()
+                self.getCardList()
+                self.mainCollectionView.reloadData()
+                self.navigationController?.popViewController(animated: true)
+            } catch {
+                print("Error writing to Realm: \(error.localizedDescription)")
             }
-            self?.realm.refresh()
-            self?.mainCollectionView.reloadData()
-            self?.navigationController?.popViewController(animated: true)
-
         }
-        
     }
     
     
