@@ -59,8 +59,6 @@ class HomeViewController: UIViewController {
                                     forCellWithReuseIdentifier: "QuickActionCollectionViewCell")
         mainCollectionView.register(UINib(nibName: "EmptyCardCell", bundle: nil),
                                     forCellWithReuseIdentifier: "EmptyCardCell")
-        
-        
     }
     
     //getting card list from Realm base
@@ -119,8 +117,6 @@ extension HomeViewController :UICollectionViewDelegate, UICollectionViewDataSour
         }
     }
     
-    
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(#function, indexPath.row)
     }
@@ -131,9 +127,7 @@ extension HomeViewController :UICollectionViewDelegate, UICollectionViewDataSour
         } else {
             CGSize(width: collectionView.frame.width-24, height: 80)
         }
-        
     }
-    
 }
 
 
@@ -294,6 +288,11 @@ extension HomeViewController {
         let allUsers = self.realm.objects(Users.self)
         let userSelf = allUsers.first(where: {$0.email == UserDefaultsHelper.getString(key: "ud_key_email")})
         let toUser = allUsers.first(where: {$0.name == self.nameTextFieldTransfer})
+        if toUser == nil{
+            let alert = UIAlertController(title: "OOPS.. Something went wrong", message: "User not found, refill the 'Transfer to' textfield", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel, handler:nil))
+            self.present(alert,animated: true, completion: nil)
+        }
         let amount = Double(amountTextFieldTransfer ?? "0")
         print("this is userfrom \(userSelf?.name ?? "")")
         print("this is userto\(toUser?.name ?? "")")
