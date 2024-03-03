@@ -24,13 +24,15 @@ class RegisterViewController: UIViewController {
             let alert = UIAlertController(title: "Register error", message: "Fill the blank fields", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        }else{
+        } else {
             let okAlert = UIAlertController(title: "Success", message: "Register accomplish", preferredStyle: UIAlertController.Style.alert)
-            okAlert.addAction(UIAlertAction(title: "Complited", style: UIAlertAction.Style.default, handler: nil))
+            okAlert.addAction(UIAlertAction(title: "Complited", style: UIAlertAction.Style.default) { _ in
+                // Move the popping action inside the completion handler
+                self.navigationController?.popViewController(animated: true)
+            })
             self.present(okAlert, animated: true, completion: nil)
             createData()
         }
-        
         
     }
     
