@@ -20,8 +20,8 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var regMailTextField: UITextField!
     
     @IBAction func registerButtonAction(_ sender: UIButton) {
-        if nameTextField.text?.isEmpty ?? false || surnameTextField.text?.isEmpty ?? false {
-            let alert = UIAlertController(title: "Register error", message: "Fill the blank fields", preferredStyle: UIAlertController.Style.alert)
+        if (nameTextField.text?.count ?? 0) < 3 || (surnameTextField.text?.count ?? 0) < 3 || (regPasswordTextField.text?.count ?? 0) < 3 || (regMailTextField.text?.count ?? 0) < 3 {
+            let alert = UIAlertController(title: "Register error", message: "Must be at least 3 characters", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Click", style: UIAlertAction.Style.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else {
@@ -55,7 +55,7 @@ class RegisterViewController: UIViewController {
         users.surname = surnameTextField.text ?? "error"
         users.email = regMailTextField.text ?? "error"
         users.password = regPasswordTextField.text ?? "error"
-        users.amount = 10.0
+        users.amount = 100.0
         
         let realm = try! Realm()
         try! realm.write {

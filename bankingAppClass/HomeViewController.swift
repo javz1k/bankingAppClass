@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
     
     let realm = try! Realm()
     let users = Users()
-    let card = Card()
+
     
     var nameTextFieldTransfer: String?
     var amountTextFieldTransfer: String?
@@ -249,7 +249,7 @@ extension HomeViewController {
                     card.pan = DataArray[1]
                     card.cardtype = DataArray[2]
                     card.cardId = UUID().uuidString
-                    card.amount = 0.0
+                    card.amount = 100.0
                     card.isFavorite = false
                     self.realm.add(card)
                 }
@@ -266,22 +266,32 @@ extension HomeViewController {
     
     
     fileprivate func transferBrain() {
-        let vc = TransferViewController.loadFromNib()
-        self.navigationController!.pushViewController(vc, animated: true)
-        
-        vc.amountCallback = { [weak self] amount in
-            guard let self = self else {return}
-            dump(amount)
-            self.amountTextFieldTransfer = amount
+        let allUsers = self.realm.objects(Users.self)
+        let allCards = self.realm.objects(Card.self)
+        print("count\(allUsers.count),\(allCards.count)")
+        if allCards.count >= 1 && allUsers.count >= 2 {
+            let vc = TransferViewController.loadFromNib()
+            self.navigationController!.pushViewController(vc, animated: true)
+            
+            vc.amountCallback = { [weak self] amount in
+                guard let self = self else {return}
+                dump(amount)
+                self.amountTextFieldTransfer = amount
+            }
+            
+            vc.nameCallback = { [weak self] name in
+                guard let self = self else {return}
+                dump(name)
+                self.nameTextFieldTransfer = name
+                self.transfer()
+                self.navigationController?.popViewController(animated: true)
+            }
+        }else{
+            let alert = UIAlertController(title: "OOPS.. Something went wrong", message: "To make a trasnfer u must have at least 1 card, or 1 friend in the list to send amount", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertAction.Style.cancel, handler:nil))
+            self.present(alert,animated: true, completion: nil)
         }
-        
-        vc.nameCallback = { [weak self] name in
-            guard let self = self else {return}
-            dump(name)
-            self.nameTextFieldTransfer = name
-            self.transfer()
-            self.navigationController?.popViewController(animated: true)
-        }
+       
     }
     
     func transfer() {
