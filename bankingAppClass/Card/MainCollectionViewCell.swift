@@ -23,11 +23,13 @@ class MainCollectionViewCell: UICollectionViewCell {
     //intitialazing callBack to sen HomeController
     var onScreenIndexPathCallBack : ((Int) -> Void)?
     var addFavoriteCard : ((Int) -> Void)?
-    
+    var addCard : (() -> Void)?
     override func awakeFromNib() {
         super.awakeFromNib()
         cardCollectionView.register(UINib(nibName: "CardCollectionViewCell", bundle: .main),
                                     forCellWithReuseIdentifier: "CardCollectionViewCell" )
+        cardCollectionView.register(UINib(nibName: "EmptyCardCell", bundle: nil),
+                                    forCellWithReuseIdentifier: "EmptyCardCell")
     }
 
 }
@@ -35,18 +37,29 @@ class MainCollectionViewCell: UICollectionViewCell {
 
 extension MainCollectionViewCell :UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cardList?.count ?? 0
+        guard let cardList = cardList else {return 0}
+        return cardList.isEmpty ? 1 : cardList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cardItem = cardList?[indexPath.row] else {return UICollectionViewCell()}
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionViewCell", for: indexPath) as! CardCollectionViewCell
-        cell.configureCell(data: cardItem )
-        return cell
+        guard let cardList = cardList else {return UICollectionViewCell()}
+        if cardList.isEmpty {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCardCell", for: indexPath) as! EmptyCardCell
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionViewCell", for: indexPath) as! CardCollectionViewCell
+            cell.configureCell(data: cardList[indexPath.row] )
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        addFavoriteCard?(indexPath.row)
+        if cardList?.isEmpty ?? false {
+            addCard?()
+        } else {
+            addFavoriteCard?(indexPath.row)
+        }
+        
     }
     
 

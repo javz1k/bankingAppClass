@@ -57,8 +57,6 @@ class HomeViewController: UIViewController {
                                     forCellWithReuseIdentifier: "MainCollectionViewCell")
         mainCollectionView.register(UINib(nibName: "QuickActionCollectionViewCell", bundle: nil),
                                     forCellWithReuseIdentifier: "QuickActionCollectionViewCell")
-        mainCollectionView.register(UINib(nibName: "EmptyCardCell", bundle: nil),
-                                    forCellWithReuseIdentifier: "EmptyCardCell")
     }
     
     //getting card list from Realm base
@@ -88,26 +86,26 @@ extension HomeViewController :UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 {
             guard let cardList = cardList else {return UICollectionViewCell()}
-            if cardList.isEmpty{
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCardCell", for: indexPath) as! EmptyCardCell
-                return cell
-            }else{
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as! MainCollectionViewCell
-                //calling configure function from cardViewCell
-                cell.configureCardList(cardList)
-                //calling callback for onscreen card index
-                
-                cell.onScreenIndexPathCallBack = { [weak self] id in
-                    guard let self = self else {return}
-                    self.onScreenCardIndexPathFunc(id: id)
-                }
-                
-                cell.addFavoriteCard = { [weak self] id in
-                    guard let self = self else {return}
-                    self.addFavorite(id: id)
-                }
-                return cell
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as! MainCollectionViewCell
+            //calling configure function from cardViewCell
+            cell.configureCardList(cardList)
+            //calling callback for onscreen card index
+            
+            cell.onScreenIndexPathCallBack = { [weak self] id in
+                guard let self = self else {return}
+                self.onScreenCardIndexPathFunc(id: id)
             }
+            
+            cell.addFavoriteCard = { [weak self] id in
+                guard let self = self else {return}
+                self.addFavorite(id: id)
+            }
+            cell.addCard = { [weak self]  in
+                guard let self = self else {return}
+                self.createBrain()
+            }
+            return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "QuickActionCollectionViewCell", for: indexPath) as! QuickActionCollectionViewCell
             cell.delegate = self
@@ -118,6 +116,7 @@ extension HomeViewController :UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         print(#function, indexPath.row)
     }
     
